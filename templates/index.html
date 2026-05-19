@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animated Notes App</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            min-height:100vh;
+            font-family:'Segoe UI',Arial,sans-serif;
+            background:linear-gradient(-45deg,#667eea,#764ba2,#ff758c,#ff7eb3);
+            background-size:400% 400%;
+            animation:bgMove 10s ease infinite;
+            padding:30px;
+        }
+
+        @keyframes bgMove{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+
+        .container{
+            width:85%;
+            margin:auto;
+        }
+
+        h1{
+            text-align:center;
+            color:white;
+            font-size:48px;
+            margin-bottom:30px;
+            text-shadow:0 0 20px rgba(255,255,255,0.7);
+            animation:drop 1s ease;
+        }
+
+        @keyframes drop{
+            from{
+                opacity:0;
+                transform:translateY(-40px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        form{
+            background:rgba(255,255,255,0.18);
+            backdrop-filter:blur(15px);
+            padding:35px;
+            border-radius:25px;
+            box-shadow:0 20px 40px rgba(0,0,0,0.25);
+            border:1px solid rgba(255,255,255,0.3);
+            animation:zoomIn 1s ease;
+        }
+
+        @keyframes zoomIn{
+            from{
+                opacity:0;
+                transform:scale(0.8);
+            }
+            to{
+                opacity:1;
+                transform:scale(1);
+            }
+        }
+
+        input, textarea{
+            width:100%;
+            padding:16px;
+            margin-top:15px;
+            border:none;
+            border-radius:15px;
+            font-size:16px;
+            outline:none;
+            background:rgba(255,255,255,0.9);
+            transition:0.3s;
+        }
+
+        input:focus, textarea:focus{
+            transform:scale(1.03);
+            box-shadow:0 0 20px white;
+        }
+
+        textarea{
+            height:150px;
+            resize:none;
+        }
+
+        button{
+            width:100%;
+            margin-top:20px;
+            padding:16px;
+            border:none;
+            border-radius:15px;
+            background:linear-gradient(45deg,#ff512f,#dd2476);
+            color:white;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+            position:relative;
+            overflow:hidden;
+        }
+
+        button::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:-100%;
+            width:100%;
+            height:100%;
+            background:rgba(255,255,255,0.4);
+            transition:0.5s;
+        }
+
+        button:hover::before{
+            left:100%;
+        }
+
+        button:hover{
+            transform:translateY(-4px);
+            box-shadow:0 15px 25px rgba(0,0,0,0.3);
+        }
+
+        .notes{
+            margin-top:40px;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:25px;
+        }
+
+        .card{
+            background:white;
+            padding:25px;
+            border-radius:25px;
+            box-shadow:0 15px 30px rgba(0,0,0,0.2);
+            position:relative;
+            overflow:hidden;
+            animation:slideUp 0.8s ease;
+            transition:0.4s;
+        }
+
+        @keyframes slideUp{
+            from{
+                opacity:0;
+                transform:translateY(50px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .card::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:7px;
+            background:linear-gradient(45deg,#ff512f,#dd2476);
+        }
+
+        .card:hover{
+            transform:translateY(-10px) rotate(1deg);
+            box-shadow:0 25px 45px rgba(0,0,0,0.3);
+        }
+
+        .card h3{
+            color:#222;
+            font-size:24px;
+            margin-bottom:12px;
+        }
+
+        .card p{
+            color:#555;
+            line-height:1.7;
+            margin-bottom:20px;
+        }
+
+        .delete-btn{
+            display:inline-block;
+            text-decoration:none;
+            background:linear-gradient(45deg,#ff0000,#cc0000);
+            color:white;
+            padding:10px 18px;
+            border-radius:10px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .delete-btn:hover{
+            transform:scale(1.08);
+            background:darkred;
+        }
+
+        .floating{
+            position:fixed;
+            width:80px;
+            height:80px;
+            border-radius:50%;
+            background:rgba(255,255,255,0.18);
+            animation:float 6s infinite ease-in-out;
+        }
+
+        .one{
+            top:10%;
+            left:8%;
+        }
+
+        .two{
+            bottom:12%;
+            right:8%;
+            animation-delay:2s;
+        }
+
+        .three{
+            top:55%;
+            left:3%;
+            animation-delay:4s;
+        }
+
+        @keyframes float{
+            0%,100%{
+                transform:translateY(0);
+            }
+            50%{
+                transform:translateY(-30px);
+            }
+        }
+
+        @media(max-width:768px){
+            .container{
+                width:95%;
+            }
+
+            h1{
+                font-size:36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="floating one"></div>
+<div class="floating two"></div>
+<div class="floating three"></div>
+
+<div class="container">
+
+    <h1>✨ Creative Notes App ✨</h1>
+
+    <form action="/add" method="POST">
+
+        <input type="text"
+               name="title"
+               placeholder="📝 Enter note title">
+
+        <textarea name="content"
+                  placeholder="💡 Write your creative note here..."></textarea>
+
+        <button type="submit">➕ Add Note</button>
+
+    </form>
+
+    <div class="notes">
+
+        {% for note in notes %}
+
+        <div class="card">
+
+            <h3>📌 {{ note[1] }}</h3>
+
+            <p>{{ note[2] }}</p>
+
+            <a href="/delete/{{ note[0] }}"
+               class="delete-btn">
+               🗑 Delete
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
